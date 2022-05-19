@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { InferGetStaticPropsType } from 'next';
 import client from '../../lib/client';
-import { Blog } from '../model/blog';
+import { Blog } from '../models/blog';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
