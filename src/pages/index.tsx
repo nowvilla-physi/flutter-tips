@@ -1,34 +1,65 @@
-import Link from 'next/link';
 import { InferGetStaticPropsType } from 'next';
 import client from '../../lib/client';
-import { Blog } from '../models/blog';
+import { BlogItem, CategoryButton } from '../components/index';
+import { Blog, Category } from '../models/types';
+import styles from '../styles/Home.module.scss';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-function Home({ blogs }: Props) {
+const toTop = () => {
+    // TODO
+    console.log('###');
+};
+
+function Home(props: Props) {
+    const { blogs, categories } = props;
     return (
-        <div>
-            <ul>
+        <section className={styles.home}>
+            {/* categories */}
+            <section>
+                <ul className={styles.home__categories}>
+                    {categories.map((category: Category) => (
+                        <li className={styles['home__categories-item']}>
+                            <CategoryButton
+                                name={category.name}
+                                handleClick={toTop}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
+            {/* blogs */}
+            <article className={styles.home__blogs}>
                 {blogs.map((blog: Blog) => (
-                    <li key={blog.id}>
-                        <Link href={`/blog/${blog.id}`}>
-                            <a>{blog.title}</a>
-                        </Link>
-                    </li>
+                    <BlogItem
+                        id={blog.id}
+                        createdAt={blog.createdAt}
+                        updatedAt={blog.updatedAt}
+                        publishedAt={blog.publishedAt}
+                        revisedAt={blog.revisedAt}
+                        title={blog.title}
+                        content={blog.content}
+                        category={blog.category}
+                        eyecatch={blog.eyecatch}
+                    />
                 ))}
-            </ul>
-        </div>
+            </article>
+        </section>
     );
 }
 
 /**
  * ブログの一覧を返す。
  *
- * @return {Promise<{props: {blogs: any}}>} ブログの一覧
+ * @return {Promise<{props: {blogs: any, categories: any}}>} ブログの一覧
  */
 export const getStaticProps = async () => {
-    const data = await client.get({ endpoint: 'blogs' });
-    return { props: { blogs: data.contents } };
+    const blogs = await client.get({ endpoint: 'blogs' });
+    const categories = await client.get({ endpoint: 'categories' });
+    return {
+        props: { blogs: blogs.contents, categories: categories.contents },
+    };
 };
 
 export default Home;
