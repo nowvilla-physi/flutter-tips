@@ -3,14 +3,25 @@
 @import '_variables.scss';
 
 .home {
-  display: flex;
+    display: flex;
 
-  &__navigation {
-    flex: 1;
-    background-color: #F78552;
-  }
+    &-navigation {
+        flex: 1;
+        background-color: #F78552;
+        height: 100vh;
+    }
 
-  &__contents {
-    flex: 8;
-  }
+    &-contents {
+        flex: 8;
+
+        &__categories {
+            display: flex;
+            padding: 8px 2%;
+            border-bottom: 1px $gray solid;
+        }
+
+        &__category {
+            margin-right: 8px;
+        }
+    }
 }
