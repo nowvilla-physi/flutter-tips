@@ -1,0 +1,31 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.search-form {
+
+    &__text {
+        padding: 8px 16px;
+        width: 448px;
+        border-radius: 8px;
+        background-color: $light-gray;
+        transition: all ease 100ms;
+
+        &:focus {
+            box-shadow: 0 0 4px $mainColor;
+        }
+    }
+
+    &__button {
+        margin-left: 16px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background-color: $mainColor;
+        color: $white;
+        transition: all ease 400ms;
+
+        &:hover {
+            background-color: $mainColorTransparent;
+        }
+    }
+}

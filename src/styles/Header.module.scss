@@ -1,0 +1,12 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 56px;
+    padding: 0 32px;
+    border-bottom: 1px $gray solid;
+}
