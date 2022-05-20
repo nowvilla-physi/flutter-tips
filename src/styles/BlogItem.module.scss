@@ -4,8 +4,14 @@
 
 .blog-item {
     width: 320px;
-    box-shadow: 4px 4px 16px $gray;
-    background-color: $light-gray;
+    box-shadow: 0 0 8px $gray;
+    background-color: $lightGray;
+    transition: all ease 300ms;
+
+    &:hover {
+        box-shadow: 0 0 16px $mainColorTransparent;
+        opacity: 0.8;
+    }
 
     &__image {
         width: 100%;
@@ -16,20 +22,21 @@
     }
 
     &__title {
-        font-size: 1.2rem;
+        font-size: 1.1rem;
         font-weight: bold;
     }
 
     &__category {
-        margin-top: 12px;
-        font-size: 1.1rem;
-    }
-
-    &__publishedAt {
         margin-top: 8px;
     }
 
+    &__publishedAt {
+        margin-top: 4px;
+        font-size: 0.9rem;
+    }
+
     &__editor {
+        font-size: 0.8rem;
         text-align: right;
     }
 

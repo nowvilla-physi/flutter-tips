@@ -5,7 +5,7 @@ import * as Strings from '../constants/strings';
 
 function BlogItem(props: Blog) {
     const { id, publishedAt, title, category, eyecatch } = props;
-    const date = new Date(publishedAt);
+    const date = publishedAt.split('T');
 
     return (
         <button className={styles['blog-item']} key={id} type='button'>
@@ -23,10 +23,10 @@ function BlogItem(props: Blog) {
                     {Strings.CATEGORY_LABEL}
                     {category.name}
                 </h3>
-                <p className={styles['blog-item__publishedAt']}>
-                    {`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`}
+                <p className={styles['blog-item__publishedAt']}>{date[0]}</p>
+                <p className={styles['blog-item__editor']}>
+                    {Strings.EDITOR_LABEL}
                 </p>
-                <p className={styles['blog-item__editor']}>Edit By Tomoki</p>
             </div>
         </button>
     );
