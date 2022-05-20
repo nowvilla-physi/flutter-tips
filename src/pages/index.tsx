@@ -1,7 +1,6 @@
-import Link from 'next/link';
 import { InferGetStaticPropsType } from 'next';
 import client from '../../lib/client';
-import { CategoryButton } from '../components/index';
+import { BlogItem, CategoryButton } from '../components/index';
 import { Blog, Category } from '../models/types';
 import styles from '../styles/Home.module.scss';
 
@@ -15,12 +14,12 @@ const toTop = () => {
 function Home(props: Props) {
     const { blogs, categories } = props;
     return (
-        <div className={styles.home}>
-            <section className={styles['home-navigation']} />
-            <section className={styles['home-contents']}>
-                <ul className={styles['home-contents__categories']}>
+        <section className={styles.home}>
+            {/* categories */}
+            <section>
+                <ul className={styles.home__categories}>
                     {categories.map((category: Category) => (
-                        <li className={styles['home-contents__category']}>
+                        <li className={styles['home__categories-item']}>
                             <CategoryButton
                                 name={category.name}
                                 handleClick={toTop}
@@ -28,17 +27,25 @@ function Home(props: Props) {
                         </li>
                     ))}
                 </ul>
-                <ul>
-                    {blogs.map((blog: Blog) => (
-                        <li key={blog.id}>
-                            <Link href={`/blog/${blog.id}`}>
-                                <a>{blog.title}</a>
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
             </section>
-        </div>
+
+            {/* blogs */}
+            <article className={styles.home__blogs}>
+                {blogs.map((blog: Blog) => (
+                    <BlogItem
+                        id={blog.id}
+                        createdAt={blog.createdAt}
+                        updatedAt={blog.updatedAt}
+                        publishedAt={blog.publishedAt}
+                        revisedAt={blog.revisedAt}
+                        title={blog.title}
+                        content={blog.content}
+                        category={blog.category}
+                        eyecatch={blog.eyecatch}
+                    />
+                ))}
+            </article>
+        </section>
     );
 }
 

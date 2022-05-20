@@ -6,7 +6,8 @@ export type Blog = {
     revisedAt: string;
     title: string;
     content: string;
-    category: EyeCatch;
+    category: Category;
+    eyecatch: EyeCatch;
 };
 
 export type EyeCatch = {

@@ -1,0 +1,36 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.blog-item {
+    width: 320px;
+    box-shadow: 4px 4px 16px $gray;
+    background-color: $light-gray;
+
+    &__image {
+        width: 100%;
+    }
+
+    &__body {
+        padding: 8px 16px;
+    }
+
+    &__title {
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+
+    &__category {
+        margin-top: 12px;
+        font-size: 1.1rem;
+    }
+
+    &__publishedAt {
+        margin-top: 8px;
+    }
+
+    &__editor {
+        text-align: right;
+    }
+
+}
