@@ -1,4 +1,5 @@
 import styles from '../styles/CategoryButton.module.scss';
+import { Tag } from './index';
 
 export type Props = {
     name: string;
@@ -13,7 +14,7 @@ function CategoryButton(props: Props) {
             onClick={handleClick}
             type='button'
         >
-            {name}
+            <Tag text={name} />
         </button>
     );
 }
