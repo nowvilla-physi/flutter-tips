@@ -12,3 +12,6 @@ export const PORTFOLIO_URL = 'https://portfolio-tomoki.vercel.app/';
 
 // home.
 export const EDITOR_LABEL = 'Posted By Tomoki';
+
+// footer.
+export const COPYRIGHT = '© 2022 Flutter Tube';
