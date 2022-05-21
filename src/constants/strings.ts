@@ -11,5 +11,4 @@ export const ZENN_URL = 'https://zenn.dev/web_tips';
 export const PORTFOLIO_URL = 'https://portfolio-tomoki.vercel.app/';
 
 // home.
-export const CATEGORY_LABEL = 'カテゴリー：';
-export const EDITOR_LABEL = 'Edit By Tomoki';
+export const EDITOR_LABEL = 'Posted By Tomoki';

@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styles from '../styles/BlogItem.module.scss';
 import { Blog } from '../models/types';
+import { Tag } from './index';
 import * as Strings from '../constants/strings';
 
 function BlogItem(props: Blog) {
@@ -20,13 +21,12 @@ function BlogItem(props: Blog) {
             <div className={styles['blog-item__body']}>
                 <h2 className={styles['blog-item__title']}>{title}</h2>
                 <h3 className={styles['blog-item__category']}>
-                    {Strings.CATEGORY_LABEL}
-                    {category.name}
+                    <Tag text={category.name} />
                 </h3>
-                <p className={styles['blog-item__publishedAt']}>{date[0]}</p>
-                <p className={styles['blog-item__editor']}>
-                    {Strings.EDITOR_LABEL}
-                </p>
+                <div className={styles['blog-item__publishedAt']}>
+                    <p>{date[0].replaceAll('-', '/')}</p>
+                    <p>{Strings.EDITOR_LABEL}</p>
+                </div>
             </div>
         </button>
     );

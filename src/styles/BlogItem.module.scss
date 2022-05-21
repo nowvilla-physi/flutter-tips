@@ -18,10 +18,15 @@
     }
 
     &__body {
-        padding: 8px 16px;
+        padding: 16px;
     }
 
     &__title {
+        height: 40px;
+        display: -webkit-box;
+        overflow: hidden;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
         font-size: 1.1rem;
         font-weight: bold;
     }
@@ -31,12 +36,10 @@
     }
 
     &__publishedAt {
-        margin-top: 4px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 8px;
         font-size: 0.9rem;
-    }
-
-    &__editor {
-        font-size: 0.8rem;
-        text-align: right;
     }
 }
