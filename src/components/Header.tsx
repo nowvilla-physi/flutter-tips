@@ -25,22 +25,29 @@ function Header() {
                     <IconButton
                         url={Strings.PORTFOLIO_URL}
                         imagePath={portfolioIcon}
+                        text={Strings.PORTFOLIO_TOOLTIP}
                     />
                 </li>
                 <li className={styles['header__icons-item']}>
                     <IconButton
                         url={Strings.GITHUB_URL}
                         imagePath={gitHubIcon}
+                        text={Strings.GITHUB_TOOLTIP}
                     />
                 </li>
                 <li className={styles['header__icons-item']}>
                     <IconButton
                         url={Strings.TWITTER_URL}
                         imagePath={twitterIcon}
+                        text={Strings.TWITTER_TOOLTIP}
                     />
                 </li>
                 <li className={styles['header__icons-item']}>
-                    <IconButton url={Strings.ZENN_URL} imagePath={zennIcon} />
+                    <IconButton
+                        url={Strings.ZENN_URL}
+                        imagePath={zennIcon}
+                        text={Strings.ZENN_TOOLTIP}
+                    />
                 </li>
             </ul>
         </header>
