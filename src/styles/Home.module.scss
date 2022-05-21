@@ -18,8 +18,11 @@
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         row-gap: 32px;
         column-gap: 16px;
-        justify-items: center;
-        align-items: center;
         padding: 16px 2%;
+
+        &-loading {
+            padding: 8px 0;
+            text-align: center;
+        }
     }
 }
