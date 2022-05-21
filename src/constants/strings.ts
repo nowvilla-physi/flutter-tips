@@ -2,6 +2,9 @@
 export const NOT_FOUND = 'Not Found...';
 export const NOT_FOUND_MESSAGE =
     'このページはすでに削除されているか、URLが間違っている可能性があります。';
+export const INTERNAL_SERVER_ERROR = 'Internal Server Error...';
+export const INTERNAL_SERVER_ERROR_MESSAGE =
+    'サーバエラーが発生しました。メンテナンス中の可能性がありますので、しばらくの間お待ちください。';
 export const ERROR_BUTTON = 'ホームに戻る';
 
 // header.

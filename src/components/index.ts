@@ -1,6 +1,7 @@
 export { default as BlogItem } from './BlogItem';
 export { default as Button } from './Button';
 export { default as CategoryButton } from './CategoryButton';
+export { default as Error } from './Error';
 export { default as Footer } from './Footer';
 export { default as Header } from './Header';
 export { default as IconButton } from './IconButton';

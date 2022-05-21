@@ -1,26 +1,15 @@
-import Image from 'next/image';
-import { useRouter } from 'next/router';
-import styles from '../styles/Error.module.scss';
+import { Error } from '../components/index';
 import * as Strings from '../constants/strings';
-import errorIcon from '../../public/images/ic_404.png';
-import { Button } from '../components/index';
+import errorImage from '../../public/images/ic_404.png';
 
-function Error() {
-    const router = useRouter();
-    const toHome = () => {
-        router.push(Strings.HOME_URL).then();
-    };
-
+function Error404() {
     return (
-        <section className={styles.error}>
-            <h2 className={styles['error__not-found']}>{Strings.NOT_FOUND}</h2>
-            <p className={styles.error__message}>{Strings.NOT_FOUND_MESSAGE}</p>
-            <div className={styles.error__image}>
-                <Image src={errorIcon} alt='エラー' />
-            </div>
-            <Button name={Strings.ERROR_BUTTON} handleClick={toHome} />
-        </section>
+        <Error
+            errorCode={Strings.NOT_FOUND}
+            errorMessage={Strings.NOT_FOUND_MESSAGE}
+            errorImage={errorImage}
+        />
     );
 }
 
-export default Error;
+export default Error404;
