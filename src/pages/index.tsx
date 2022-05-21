@@ -1,10 +1,16 @@
 import { InferGetStaticPropsType } from 'next';
+import Image from 'next/image';
+import { useState } from 'react';
+import InfiniteScroll from 'react-infinite-scroller';
 import client from '../../lib/client';
 import { BlogItem, CategoryButton } from '../components/index';
 import { Blog, Category } from '../models/types';
 import styles from '../styles/Home.module.scss';
+import loadingIcon from '../../public/images/ic_loading.gif';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
+
+const INITIAL_LIMIT = 16;
 
 const toTop = () => {
     // TODO
@@ -12,7 +18,64 @@ const toTop = () => {
 };
 
 function Home(props: Props) {
-    const { blogs, categories } = props;
+    // getStaticPropsで取得したデータ
+    const { initialBlogs, categories } = props;
+
+    // ブログの一覧
+    const [blogs, setBlogs] = useState<Blog[]>(initialBlogs);
+
+    // スクロール時に取得していないブログがあるかのフラグ
+    const [hasMoreBlog, setHasMoreBlog] = useState<boolean>(true);
+
+    // スクロール時に取得していないブログがあるかのフラグ
+    const [offset, setOffset] = useState<number>(INITIAL_LIMIT);
+
+    // 読み込み時に表示するコンポーネント
+    const loader = (
+        <p className={styles['home__blogs-loading']}>
+            <Image src={loadingIcon} width={32} height={32} />
+        </p>
+    );
+
+    // 画面に表示するブログの一覧
+    const items = (
+        <article className={styles.home__blogs}>
+            {blogs.map((blog: Blog) => (
+                <BlogItem
+                    id={blog.id}
+                    createdAt={blog.createdAt}
+                    updatedAt={blog.updatedAt}
+                    publishedAt={blog.publishedAt}
+                    revisedAt={blog.revisedAt}
+                    title={blog.title}
+                    content={blog.content}
+                    category={blog.category}
+                    eyecatch={blog.eyecatch}
+                />
+            ))}
+        </article>
+    );
+
+    /**
+     * スクロール時に取得していないブログを取得する
+     */
+    const loadMore = async () => {
+        const data = await client.get({
+            endpoint: 'blogs',
+            queries: { limit: 16, offset },
+        });
+        const newBlogs: Blog[] = data.contents;
+        setOffset((prevState: number) => prevState + blogs.length);
+
+        // 取得したデータが0件の場合は読み込みを終了する
+        if (newBlogs.length === 0) {
+            setHasMoreBlog(false);
+            return;
+        }
+
+        setBlogs((prevState: Blog[]) => [...prevState, ...newBlogs]);
+    };
+
     return (
         <section className={styles.home}>
             {/* categories */}
@@ -31,34 +94,36 @@ function Home(props: Props) {
 
             {/* blogs */}
             <article className={styles.home__blogs}>
-                {blogs.map((blog: Blog) => (
-                    <BlogItem
-                        id={blog.id}
-                        createdAt={blog.createdAt}
-                        updatedAt={blog.updatedAt}
-                        publishedAt={blog.publishedAt}
-                        revisedAt={blog.revisedAt}
-                        title={blog.title}
-                        content={blog.content}
-                        category={blog.category}
-                        eyecatch={blog.eyecatch}
-                    />
-                ))}
+                <InfiniteScroll
+                    loadMore={loadMore}
+                    hasMore={hasMoreBlog}
+                    loader={loader}
+                >
+                    {items}
+                </InfiniteScroll>
             </article>
         </section>
     );
 }
 
 /**
- * ブログの一覧を返す。
+ * ブログの一覧を返す(画面表示に呼ばれる)。
  *
- * @return {Promise<{props: {blogs: any, categories: any}}>} ブログの一覧
+ * @return {Promise<{props: {blogs: any, categories: any}}>} ブログとカテゴリーの一覧
  */
 export const getStaticProps = async () => {
-    const blogs = await client.get({ endpoint: 'blogs' });
+    // APIでブログの一覧を取得する
+    const blogs = await client.get({
+        endpoint: 'blogs',
+        queries: { limit: INITIAL_LIMIT, offset: 0 },
+    });
+    // APIでカテゴリの一覧を取得する
     const categories = await client.get({ endpoint: 'categories' });
     return {
-        props: { blogs: blogs.contents, categories: categories.contents },
+        props: {
+            initialBlogs: blogs.contents,
+            categories: categories.contents,
+        },
     };
 };
 

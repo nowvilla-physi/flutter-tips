@@ -1,16 +1,25 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from '../styles/IconButton.module.scss';
+import { Tooltip } from './index';
 
 export type Props = {
     imagePath: any;
     url: string;
+    text: string;
 };
 
 function IconButton(props: Props) {
-    const { imagePath, url } = props;
+    const { imagePath, url, text } = props;
+    const [isVisibleTooltip, setIsVisibleTooltip] = useState(false);
+
     return (
-        <div className={styles['icon-button']}>
+        <div
+            className={styles['icon-button']}
+            onMouseEnter={() => setIsVisibleTooltip(true)}
+            onMouseLeave={() => setIsVisibleTooltip(false)}
+        >
             <Link href={url}>
                 <a target='_blank'>
                     <Image
@@ -22,6 +31,9 @@ function IconButton(props: Props) {
                     />
                 </a>
             </Link>
+            <div className={styles['icon-button__tooltip']}>
+                <Tooltip text={text} isVisible={isVisibleTooltip} />
+            </div>
         </div>
     );
 }
