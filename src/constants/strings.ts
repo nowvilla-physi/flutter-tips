@@ -18,6 +18,7 @@ export const PORTFOLIO_URL = 'https://portfolio-tomoki.vercel.app/';
 export const HOME_URL = '/';
 
 // home.
+export const ALL_CATEGORY_BUTTON = 'すべて';
 export const EDITOR_LABEL = 'Posted By Tomoki';
 
 // footer.

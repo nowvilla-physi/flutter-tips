@@ -3,24 +3,24 @@ import Image from 'next/image';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import { useRouter } from 'next/router';
-import client from '../../lib/client';
-import { BlogItem, CategoryButton } from '../components/index';
-import { Blog, Category } from '../models/types';
-import styles from '../styles/Home.module.scss';
-import loadingIcon from '../../public/images/ic_loading.gif';
-import * as Strings from '../constants/strings';
+import client from '../../../lib/client';
+import { BlogItem, CategoryButton } from '../../components/index';
+import { Blog, Category } from '../../models/types';
+import styles from '../../styles/Home.module.scss';
+import loadingIcon from '../../../public/images/ic_loading.gif';
+import * as Strings from '../../constants/strings';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 // 初期に取得するブログの最大件数
 const INITIAL_LIMIT = 16;
 
-function Home(props: Props) {
+function CategoryId(props: Props) {
     // getStaticPropsで取得したデータ
-    const { initialBlogs, categories } = props;
+    const { filteredBlogs, categories } = props;
 
     // ブログの一覧
-    const [blogs, setBlogs] = useState<Blog[]>(initialBlogs);
+    const [blogs, setBlogs] = useState<Blog[]>(filteredBlogs);
 
     // スクロール時に取得していないブログがあるかのフラグ
     const [hasMoreBlog, setHasMoreBlog] = useState<boolean>(true);
@@ -29,6 +29,8 @@ function Home(props: Props) {
     const [offset, setOffset] = useState<number>(INITIAL_LIMIT);
 
     const router = useRouter();
+    const paths = router.asPath.split('/');
+    const filteredCategoryId = paths[paths.length - 1];
 
     // 読み込み時に表示するコンポーネント
     const loader = (
@@ -63,8 +65,13 @@ function Home(props: Props) {
     const loadMore = async () => {
         const data = await client.get({
             endpoint: 'blogs',
-            queries: { limit: INITIAL_LIMIT, offset },
+            queries: {
+                limit: INITIAL_LIMIT,
+                offset,
+                filters: `category[equals]${filteredCategoryId}`,
+            },
         });
+
         const newBlogs: Blog[] = data.contents;
 
         // オフセットを更新する
@@ -79,7 +86,9 @@ function Home(props: Props) {
     };
 
     const toFilteredBlogs = (categoryId: string) => {
-        if (categoryId !== null) {
+        if (categoryId == null) {
+            router.push(`/`).then();
+        } else if (categoryId !== filteredCategoryId) {
             router.push(`/categories/${categoryId}`).then();
         }
     };
@@ -126,25 +135,32 @@ function Home(props: Props) {
     );
 }
 
-/**
- * ブログの一覧を返す(画面表示に呼ばれる)。
- *
- * @return {Promise<{props: {blogs: any, categories: any}}>} ブログとカテゴリーの一覧
- */
-export const getStaticProps = async () => {
-    // APIでブログの一覧を取得する
+export const getStaticPaths = async () => {
+    const data = await client.get({ endpoint: 'categories' });
+    const paths = data.contents.map((content) => `/categories/${content.id}`);
+    return { paths, fallback: false };
+};
+
+export const getStaticProps = async (context) => {
+    const { id } = context.params;
+
+    // APIでフィルタリングしたブログの一覧を取得する
     const blogs = await client.get({
         endpoint: 'blogs',
-        queries: { limit: INITIAL_LIMIT, offset: 0 },
+        queries: {
+            limit: INITIAL_LIMIT,
+            offset: 0,
+            filters: `category[equals]${id}`,
+        },
     });
     // APIでカテゴリの一覧を取得する
     const categories = await client.get({ endpoint: 'categories' });
     return {
         props: {
-            initialBlogs: blogs.contents,
+            filteredBlogs: blogs.contents,
             categories: categories.contents,
         },
     };
 };
 
-export default Home;
+export default CategoryId;
