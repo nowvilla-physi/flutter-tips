@@ -2,6 +2,7 @@ import { InferGetStaticPropsType } from 'next';
 import Image from 'next/image';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+import { useRouter } from 'next/router';
 import client from '../../lib/client';
 import { BlogItem, CategoryButton } from '../components/index';
 import { Blog, Category } from '../models/types';
@@ -10,18 +11,14 @@ import loadingIcon from '../../public/images/ic_loading.gif';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
+// 初期に取得するブログの最大件数
 const INITIAL_LIMIT = 16;
-
-const toTop = () => {
-    // TODO
-    console.log('###');
-};
 
 function Home(props: Props) {
     // getStaticPropsで取得したデータ
     const { initialBlogs, categories } = props;
 
-    // ブログの一覧
+    // 画面に表示するブログの一覧
     const [blogs, setBlogs] = useState<Blog[]>(initialBlogs);
 
     // スクロール時に取得していないブログがあるかのフラグ
@@ -37,8 +34,13 @@ function Home(props: Props) {
         </p>
     );
 
+    const router = useRouter();
+    const toCategories = (category: Category) => {
+        router.push(`/categories/${category.id}`).then();
+    };
+
     // 画面に表示するブログの一覧
-    const items = (
+    const blogItems = (
         <article className={styles.home__blogs}>
             {blogs.map((blog: Blog) => (
                 <BlogItem
@@ -85,7 +87,7 @@ function Home(props: Props) {
                         <li className={styles['home__categories-item']}>
                             <CategoryButton
                                 name={category.name}
-                                handleClick={toTop}
+                                handleClick={() => toCategories(category)}
                             />
                         </li>
                     ))}
@@ -99,7 +101,7 @@ function Home(props: Props) {
                     hasMore={hasMoreBlog}
                     loader={loader}
                 >
-                    {items}
+                    {blogItems}
                 </InfiniteScroll>
             </article>
         </section>
