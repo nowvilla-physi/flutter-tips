@@ -1,11 +1,12 @@
 import { InferGetStaticPropsType } from 'next';
-import { useState } from 'react';
+import { useContext, useEffect } from 'react';
 import client from '../../lib/client';
 import { BlogItem, CategoryButton, Error } from '../components/index';
 import { Blog, Category } from '../models/types';
 import styles from '../styles/Home.module.scss';
 import * as Strings from '../constants/strings';
 import errorImage from '../../public/images/ic_500.png';
+import { blogContext } from '../hooks/useBlog';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -16,8 +17,13 @@ function Home(props: Props) {
     // getStaticPropsで取得したデータ
     const { allBlogs, categories } = props;
 
-    // ブログの一覧
-    const [blogs, setBlogs] = useState<Blog[]>(allBlogs);
+    const context = useContext(blogContext);
+
+    useEffect(() => {
+        // useContextにステートを保持する
+        context.setAllBlog(allBlogs);
+        context.setBlog(allBlogs);
+    }, []);
 
     /**
      * 指定したカテゴリーでブログをフィルターする。
@@ -26,12 +32,12 @@ function Home(props: Props) {
      */
     const filterBlog = (categoryId: string) => {
         if (categoryId === null) {
-            setBlogs(allBlogs);
+            context.setBlog(allBlogs);
         } else {
             const filteredBlogs = allBlogs.filter(
                 (blog: Blog) => blog.category.id === categoryId
             );
-            setBlogs(filteredBlogs);
+            context.setBlog(filteredBlogs);
         }
     };
 
@@ -72,7 +78,7 @@ function Home(props: Props) {
             {/* blogs */}
             <article className={styles.home__blogs}>
                 <article className={styles.home__blogs}>
-                    {blogs.map((blog: Blog) => (
+                    {context.blogs.map((blog: Blog) => (
                         <BlogItem
                             key={blog.id}
                             id={blog.id}
@@ -107,6 +113,7 @@ export const getStaticProps = async () => {
 
         // APIでカテゴリの一覧を取得する
         const categories = await client.get({ endpoint: 'categories' });
+
         return {
             props: {
                 allBlogs: blogs.contents,
