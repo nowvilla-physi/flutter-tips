@@ -1,5 +1,6 @@
 import { InferGetStaticPropsType } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/androidstudio.css';
@@ -8,10 +9,11 @@ import { Tag } from '../../components/index';
 import styles from '../../styles/Article.module.scss';
 import * as Strings from '../../constants/strings';
 import portfolioIcon from '../../../public/images/ic_portfolio.png';
+import { Toc } from '../../models/types';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-function Article({ blog, body }: Props) {
+function Article({ blog, body, toc }: Props) {
     const { id, publishedAt, updatedAt, title, category } = blog;
 
     return (
@@ -43,7 +45,25 @@ function Article({ blog, body }: Props) {
                     dangerouslySetInnerHTML={{ __html: body }}
                 />
             </main>
-            <aside className={styles.article__aside} />
+            <aside className={styles.article__aside}>
+                <section className={styles.article__toc}>
+                    <p className={styles['article__toc-label']}>
+                        {Strings.TOC_LABEL}
+                    </p>
+                    <ul className={styles['article__toc-nav']}>
+                        {toc.map((item: Toc) => (
+                            <li
+                                key={item.id}
+                                className={styles[`article__toc-${item.name}`]}
+                            >
+                                <Link href={`#${item.id}`}>
+                                    <a>{item.text}</a>
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+            </aside>
         </article>
     );
 }
@@ -69,17 +89,28 @@ export const getStaticProps = async (context) => {
     const { id } = context.params;
     const blog = await client.get({ endpoint: 'blogs', contentId: id });
 
+    // リッチテキストを解析する
     const $ = cheerio.load(blog.content || '');
+
+    // iframeタグをラップする
     $('iframe').wrap('<div class="iframe-wrapper" />');
+
+    // コードブロックにハイライトを当てる
     $('pre code').each((_, element) => {
         const result = hljs.highlightAuto($(element).text());
         $(element).html(result.value);
         $(element).addClass('hljs');
     });
 
-    console.log($.html());
+    // 目次に必要なデータ
+    const headers = $('h1, h2, h3').toArray();
+    const toc = headers.map((element) => ({
+        text: 'children' in element ? element.children[0].data : '',
+        id: 'attribs' in element ? element.attribs.id : '',
+        name: 'name' in element ? element.name : '',
+    }));
 
-    return { props: { blog, body: $.html() } };
+    return { props: { blog, body: $.html(), toc } };
 };
 
 /**
@@ -107,9 +138,7 @@ export const createUpdatedAt = (updatedAt: string) => {
     if (updatedAt == null) {
         return '';
     }
-    return `${Strings.UPDATED_AT_LABEL}${createDisplayTimestamp(
-        updatedAt
-    )}`;
+    return `${Strings.UPDATED_AT_LABEL}${createDisplayTimestamp(updatedAt)}`;
 };
 
 /**

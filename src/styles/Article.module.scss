@@ -6,14 +6,14 @@ $borderRadius: 8px;
 
 .article {
     display: flex;
-    margin-top: 80px;
-    padding: 0 16% 48px;
+    margin: 80px auto 0;
+    max-width: 1240px;
+    padding: 0 2% 48px;
 
     &__contents {
-        width: 80%;
+        width: 75%;
         padding: 24px 32px;
-        border-top-left-radius: $borderRadius;
-        border-bottom-left-radius: $borderRadius;
+        border-radius: $borderRadius;
         background-color: $blogBackgroundColor;
     }
 
@@ -47,8 +47,37 @@ $borderRadius: 8px;
     }
 
     &__body {
+        margin-top: 40px;
         font-size: 1.1rem;
         line-height: 1.4;
+
+        h1 {
+            margin-top: -56px;
+            padding-top: 56px;
+            padding-bottom: 4px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-bottom: 1px $gray solid;
+        }
+
+        h2 {
+            margin-top: -56px;
+            padding-top: 56px;
+            padding-bottom: 4px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-bottom: 1px $gray solid;
+        }
+
+        h3 {
+            margin-top: -56px;
+            padding-top: 56px;
+            font-size: 1.4rem;
+        }
+
+        h4 {
+            font-size: 1.2rem;
+        }
 
         pre {
             margin: 8px 0;
@@ -67,20 +96,80 @@ $borderRadius: 8px;
         iframe {
             border-radius: $borderRadius;
         }
-
-        a {
-            color: $linkTextColor;
-
-            &:hover {
-                text-decoration: underline;
-            }
-        }
     }
 
     &__aside {
-        width: 20%;
-        border-top-right-radius: $borderRadius;
-        border-bottom-right-radius: $borderRadius;
-        background-color: #53C6F8;
+        width: 25%;
+    }
+
+    &__toc {
+        position: sticky;
+        position: -webkit-sticky;
+        top: 80px;
+        margin-left: 16px;
+        padding: 24px 16px;
+        border-radius: $borderRadius;
+        background-color: $blogBackgroundColor;
+    }
+
+    &__toc-label {
+        font-size: 1.1rem;
+        font-weight: bold;
+    }
+
+    &__toc-nav {
+        margin-top: 8px;
+        margin-left: 16px;
+        font-size: 0.9rem;
+    }
+
+    &__toc-h1 {
+        margin-top: 8px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &:before {
+            margin-right: 4px;
+            font-size: 0.4rem;
+            color: $linkTextColor;
+            content: '●';
+        }
+    }
+
+    &__toc-h2 {
+        margin: 8px 0 0 16px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &:before {
+            margin-right: 4px;
+            font-size: 0.4rem;
+            color: $linkTextColor;
+            content: '◉';
+        }
+    }
+
+    &__toc-h3 {
+        margin: 8px 0 0 32px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+
+        &:before {
+            margin-right: 4px;
+            font-size: 0.4rem;
+            color: $linkTextColor;
+            content: '○';
+        }
+    }
+
+    a {
+        color: $linkTextColor;
+
+        &:hover {
+            text-decoration: underline;
+        }
     }
 }

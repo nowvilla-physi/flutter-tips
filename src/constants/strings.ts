@@ -8,7 +8,7 @@ export const INTERNAL_SERVER_ERROR_MESSAGE =
 export const ERROR_BUTTON = 'ホームに戻る';
 
 // header.
-export const SEARCH_FORM_PLACEHOLDER = 'Searched Text...';
+export const SEARCH_FORM_PLACEHOLDER = 'サイト内検索';
 export const SEARCH_FORM_BUTTON = '検索';
 export const GITHUB_TOOLTIP = 'GitHub';
 export const TWITTER_TOOLTIP = 'Twitter';
@@ -30,3 +30,4 @@ export const COPYRIGHT = '© 2022 Flutter Tube';
 // article.
 export const PUBLISHED_AT_LABEL = '公開日：';
 export const UPDATED_AT_LABEL = '更新日：';
+export const TOC_LABEL = '目次';
