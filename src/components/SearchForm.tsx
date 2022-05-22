@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useRouter } from 'next/router';
 import styles from '../styles/SearchForm.module.scss';
 import * as Strings from '../constants/strings';
 import { blogContext } from '../hooks/useBlog';
@@ -6,11 +7,26 @@ import { Blog } from '../models/types';
 
 function SearchForm() {
     const [text, setText] = useState('');
+    const router = useRouter();
     const context = useContext(blogContext);
     const { blogs } = context;
     const { allBlogs } = context;
 
     const search = () => {
+        if (router.pathname !== '/') {
+            router.push(Strings.HOME_URL).then(() => {
+                if (text.trim() !== '') {
+                    setTimeout(() => {
+                        searchBlog();
+                    }, 500);
+                }
+            });
+        } else {
+            searchBlog();
+        }
+    };
+
+    const searchBlog = () => {
         if (text.trim() === '') {
             if (blogs.length !== allBlogs.length) {
                 context.setBlog(allBlogs);

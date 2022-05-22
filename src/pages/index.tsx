@@ -1,7 +1,7 @@
 import { InferGetStaticPropsType } from 'next';
 import { useContext, useEffect } from 'react';
 import client from '../../lib/client';
-import { BlogItem, CategoryButton, Error } from '../components/index';
+import { BlogItem, CategoryButton, Error, NoBlog } from '../components/index';
 import { Blog, Category } from '../models/types';
 import styles from '../styles/Home.module.scss';
 import * as Strings from '../constants/strings';
@@ -15,14 +15,15 @@ const INITIAL_LIMIT = 1000;
 
 function Home(props: Props) {
     // getStaticPropsで取得したデータ
-    const { allBlogs, categories } = props;
-
+    const { fetchedBlogs, categories } = props;
     const context = useContext(blogContext);
+    const { blogs } = context;
+    const { allBlogs } = context;
 
     useEffect(() => {
         // useContextにステートを保持する
-        context.setAllBlog(allBlogs);
-        context.setBlog(allBlogs);
+        context.setAllBlog(fetchedBlogs);
+        context.setBlog(fetchedBlogs);
     }, []);
 
     /**
@@ -41,13 +42,16 @@ function Home(props: Props) {
         }
     };
 
-    return Object.keys(props).length === 0 ? (
-        <Error
-            errorCode={Strings.INTERNAL_SERVER_ERROR}
-            errorMessage={Strings.INTERNAL_SERVER_ERROR_MESSAGE}
-            errorImage={errorImage}
-        />
-    ) : (
+    if (Object.keys(props).length === 0) {
+        return (
+            <Error
+                errorCode={Strings.INTERNAL_SERVER_ERROR}
+                errorMessage={Strings.INTERNAL_SERVER_ERROR_MESSAGE}
+                errorImage={errorImage}
+            />
+        );
+    }
+    return (
         <main className={styles.home}>
             {/* categories */}
             <section>
@@ -76,24 +80,28 @@ function Home(props: Props) {
             </section>
 
             {/* blogs */}
-            <article className={styles.home__blogs}>
+            {blogs.length === 0 ? (
+                <NoBlog />
+            ) : (
                 <article className={styles.home__blogs}>
-                    {context.blogs.map((blog: Blog) => (
-                        <BlogItem
-                            key={blog.id}
-                            id={blog.id}
-                            createdAt={blog.createdAt}
-                            updatedAt={blog.updatedAt}
-                            publishedAt={blog.publishedAt}
-                            revisedAt={blog.revisedAt}
-                            title={blog.title}
-                            content={blog.content}
-                            category={blog.category}
-                            eyecatch={blog.eyecatch}
-                        />
-                    ))}
+                    <article className={styles.home__blogs}>
+                        {blogs.map((blog: Blog) => (
+                            <BlogItem
+                                key={blog.id}
+                                id={blog.id}
+                                createdAt={blog.createdAt}
+                                updatedAt={blog.updatedAt}
+                                publishedAt={blog.publishedAt}
+                                revisedAt={blog.revisedAt}
+                                title={blog.title}
+                                content={blog.content}
+                                category={blog.category}
+                                eyecatch={blog.eyecatch}
+                            />
+                        ))}
+                    </article>
                 </article>
-            </article>
+            )}
         </main>
     );
 }
@@ -116,7 +124,7 @@ export const getStaticProps = async () => {
 
         return {
             props: {
-                allBlogs: blogs.contents,
+                fetchedBlogs: blogs.contents,
                 categories: categories.contents,
             },
         };
