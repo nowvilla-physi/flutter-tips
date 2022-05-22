@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styles from '../styles/Header.module.scss';
 import { IconButton, SearchForm } from './index';
 import * as Strings from '../constants/strings';
-import logoPC from '../../public/images/logo_pc.png';
+import logoPC from '../../public/images/ic_logo_pc.png';
 import portfolioIcon from '../../public/images/ic_portfolio.png';
 import gitHubIcon from '../../public/images/ic_github.png';
 import twitterIcon from '../../public/images/ic_twitter.png';
@@ -15,7 +15,7 @@ function Header() {
             <h1 className={styles.header__logo}>
                 <Link href={Strings.HOME_URL}>
                     <a>
-                        <Image src={logoPC} alt='Flutter School' />
+                        <Image src={logoPC} alt='FlutterTips' />
                     </a>
                 </Link>
             </h1>

@@ -103,12 +103,15 @@ export const getStaticProps = async (context) => {
     });
 
     // 目次に必要なデータ
-    const headers = $('h1, h2, h3').toArray();
-    const toc = headers.map((element) => ({
-        text: 'children' in element ? element.children[0].data : '',
-        id: 'attribs' in element ? element.attribs.id : '',
-        name: 'name' in element ? element.name : '',
-    }));
+    const headers = $('h2, h3').toArray();
+    const toc = headers
+        .map((element) => ({
+            text: 'children' in element ? element.children[0].data : '',
+            id: 'attribs' in element ? element.attribs.id : '',
+            name: 'name' in element ? element.name : '',
+        }))
+        // 不要な見出しの改行を排除する
+        .filter((item: Toc) => item.text !== undefined);
 
     return { props: { blog, body: $.html(), toc } };
 };

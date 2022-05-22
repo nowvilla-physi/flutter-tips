@@ -123,7 +123,7 @@ $borderRadius: 8px;
         font-size: 0.9rem;
     }
 
-    &__toc-h1 {
+    &__toc-h2 {
         margin-top: 8px;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -137,22 +137,8 @@ $borderRadius: 8px;
         }
     }
 
-    &__toc-h2 {
-        margin: 8px 0 0 16px;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-        overflow: hidden;
-
-        &:before {
-            margin-right: 4px;
-            font-size: 0.4rem;
-            color: $linkTextColor;
-            content: '◉';
-        }
-    }
-
     &__toc-h3 {
-        margin: 8px 0 0 32px;
+        margin: 8px 0 0 16px;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;

@@ -25,7 +25,7 @@ export const ALL_CATEGORY_BUTTON = 'すべて';
 export const EDITOR_LABEL = 'Posted By Tomoki';
 
 // footer.
-export const COPYRIGHT = '© 2022 Flutter Tube';
+export const COPYRIGHT = '© 2022 Flutter Tips';
 
 // article.
 export const PUBLISHED_AT_LABEL = '公開日：';
