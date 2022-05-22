@@ -1,0 +1,86 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+$borderRadius: 8px;
+
+.article {
+    display: flex;
+    margin-top: 80px;
+    padding: 0 16% 48px;
+
+    &__contents {
+        width: 80%;
+        padding: 24px 32px;
+        border-top-left-radius: $borderRadius;
+        border-bottom-left-radius: $borderRadius;
+        background-color: $blogBackgroundColor;
+    }
+
+    &__header {
+        display: flex;
+        align-items: center;
+    }
+
+    &__editor {
+        margin-left: 8px;
+    }
+
+    &__publishedAt {
+        display: inline-block;
+        padding-top: 8px;
+    }
+
+    &__updatedAt {
+        display: inline-block;
+        margin-left: 16px;
+    }
+
+    &__tag {
+        padding-top: 8px;
+    }
+
+    &__title {
+        padding: 16px 0;
+        font-size: 2.2rem;
+        font-weight: bold;
+    }
+
+    &__body {
+        font-size: 1.1rem;
+        line-height: 1.4;
+
+        pre {
+            margin: 8px 0;
+
+            code {
+                border-radius: $borderRadius;
+            }
+        }
+
+        img {
+            width: 100%;
+            object-fit: contain;
+            border-radius: $borderRadius;
+        }
+
+        iframe {
+            border-radius: $borderRadius;
+        }
+
+        a {
+            color: $linkTextColor;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &__aside {
+        width: 20%;
+        border-top-right-radius: $borderRadius;
+        border-bottom-right-radius: $borderRadius;
+        background-color: #53C6F8;
+    }
+}

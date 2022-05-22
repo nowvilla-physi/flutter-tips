@@ -42,7 +42,7 @@ function Home(props: Props) {
             errorImage={errorImage}
         />
     ) : (
-        <section className={styles.home}>
+        <main className={styles.home}>
             {/* categories */}
             <section>
                 <ul className={styles.home__categories}>
@@ -88,12 +88,12 @@ function Home(props: Props) {
                     ))}
                 </article>
             </article>
-        </section>
+        </main>
     );
 }
 
 /**
- * ブログの一覧を返す(画面表示に呼ばれる)。
+ * ブログの一覧を返す。
  *
  * @return {Promise<{props: {blogs: any, categories: any}}>} ブログとカテゴリーの一覧
  */

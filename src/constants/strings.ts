@@ -26,3 +26,7 @@ export const EDITOR_LABEL = 'Posted By Tomoki';
 
 // footer.
 export const COPYRIGHT = '© 2022 Flutter Tube';
+
+// article.
+export const PUBLISHED_AT_LABEL = '公開日：';
+export const UPDATED_AT_LABEL = '更新日：';
