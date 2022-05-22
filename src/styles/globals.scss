@@ -9,10 +9,15 @@ html {
 }
 
 body {
-    position: relative;
     background-color: $baseColor;
     color: black;
     font-family: 'Klee One', cursive;
     font-size: 1.0rem;
+    box-sizing: border-box;
+}
+
+.app {
+    position: relative;
+    min-height: 100vh;
     box-sizing: border-box;
 }

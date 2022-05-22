@@ -3,6 +3,8 @@
 @import '_variables.scss';
 
 .home {
+    margin-top: 56px;
+
     &__categories {
         display: flex;
         padding: 8px 2%;
@@ -18,8 +20,7 @@
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
         row-gap: 32px;
         column-gap: 16px;
-        margin-bottom: 24px;
-        padding: 16px 2%;
+        padding: 16px 2% 24px;
 
         &-loading {
             padding: 8px 0;

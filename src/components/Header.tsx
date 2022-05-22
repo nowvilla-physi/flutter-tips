@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from '../styles/Header.module.scss';
 import { IconButton, SearchForm } from './index';
 import * as Strings from '../constants/strings';
@@ -8,16 +9,15 @@ import gitHubIcon from '../../public/images/ic_github.png';
 import twitterIcon from '../../public/images/ic_twitter.png';
 import zennIcon from '../../public/images/ic_zenn.png';
 
-const toTop = () => {
-    // TODO
-    console.log('###');
-};
-
 function Header() {
     return (
         <header className={styles.header}>
             <h1 className={styles.header__logo}>
-                <Image src={logoPC} alt='Flutter School' onClick={toTop} />
+                <Link href={Strings.HOME_URL}>
+                    <a>
+                        <Image src={logoPC} alt='Flutter School' />
+                    </a>
+                </Link>
             </h1>
             <SearchForm />
             <ul className={styles.header__icons}>

@@ -24,3 +24,9 @@ export type Category = {
     revisedAt: string;
     name: string;
 };
+
+export type Toc = {
+    id: string;
+    text: string;
+    name: string;
+};
