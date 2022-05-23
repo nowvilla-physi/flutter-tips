@@ -116,7 +116,7 @@ export const getStaticProps = async () => {
         // APIでブログの一覧を取得する
         const blogs = await client.get({
             endpoint: 'blogs',
-            queries: { limit: INITIAL_LIMIT },
+            queries: { limit: INITIAL_LIMIT, orders: '-createdAt' },
         });
 
         // APIでカテゴリの一覧を取得する

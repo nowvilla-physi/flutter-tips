@@ -16,23 +16,25 @@ import { blogContext } from '../../hooks/useBlog';
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 function Article({ blog, body, toc }: Props) {
-    const MAX_BLOG_RELATED_COUNT = 5;
+    const MAX_BLOG_COUNT = 5;
     const { id, publishedAt, updatedAt, title, category } = blog;
     const context = useContext(blogContext);
     const { allBlogs } = context;
     const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
+    const [newBlogs, setNewBlogs] = useState<Blog[]>([]);
 
     useEffect(() => {
         const blogs = allBlogs.filter(
             (item: Blog) => item.category.id === category.id
         );
+        setNewBlogs(allBlogs.slice(0, MAX_BLOG_COUNT));
 
         // eslint-disable-next-line no-plusplus
         for (let i = blogs.length; i > 1; i--) {
             const k = Math.floor(Math.random() * i);
             [blogs[k], blogs[i - 1]] = [blogs[i - 1], blogs[k]];
         }
-        setRelatedBlogs(blogs.slice(0, MAX_BLOG_RELATED_COUNT));
+        setRelatedBlogs(blogs.slice(0, MAX_BLOG_COUNT));
     }, []);
 
     return (
@@ -67,7 +69,7 @@ function Article({ blog, body, toc }: Props) {
                 </section>
                 <section className={styles['related-article']}>
                     <h3 className={styles['related-article__label']}>
-                        関連記事
+                        {Strings.RELATED_BLOG_LABEL}
                     </h3>
                     <ul className={styles['related-article__items']}>
                         {relatedBlogs.map((relatedBlog: Blog) => (
@@ -85,6 +87,31 @@ function Article({ blog, body, toc }: Props) {
                                     content={relatedBlog.content}
                                     category={relatedBlog.category}
                                     eyecatch={relatedBlog.eyecatch}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </section>
+                <section className={styles['related-article']}>
+                    <h3 className={styles['related-article__label']}>
+                        {Strings.NEW_BLOG_LABEL}
+                    </h3>
+                    <ul className={styles['related-article__items']}>
+                        {newBlogs.map((newBlog: Blog) => (
+                            <li
+                                key={newBlog.id}
+                                className={styles['related-article__item']}
+                            >
+                                <RelatedArticle
+                                    id={newBlog.id}
+                                    createdAt={newBlog.createdAt}
+                                    updatedAt={newBlog.updatedAt}
+                                    publishedAt={newBlog.publishedAt}
+                                    revisedAt={newBlog.revisedAt}
+                                    title={newBlog.title}
+                                    content={newBlog.content}
+                                    category={newBlog.category}
+                                    eyecatch={newBlog.eyecatch}
                                 />
                             </li>
                         ))}

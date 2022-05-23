@@ -32,3 +32,5 @@ export const COPYRIGHT = '© 2022 Flutter Tips';
 export const PUBLISHED_AT_LABEL = '公開日：';
 export const UPDATED_AT_LABEL = '更新日：';
 export const TOC_LABEL = '目次';
+export const RELATED_BLOG_LABEL = '関連記事';
+export const NEW_BLOG_LABEL = '新着記事';
