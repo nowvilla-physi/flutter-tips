@@ -10,8 +10,11 @@ $borderRadius: 8px;
     max-width: 1240px;
     padding: 0 2% 48px;
 
-    &__contents {
+    &__container {
         width: 75%;
+    }
+
+    &__contents {
         padding: 24px 32px;
         border-radius: $borderRadius;
         background-color: $blogBackgroundColor;
@@ -95,6 +98,29 @@ $borderRadius: 8px;
 
         iframe {
             border-radius: $borderRadius;
+        }
+    }
+
+    .related-article {
+        margin-top: 24px;
+        padding: 24px 32px;
+        border-radius: $borderRadius;
+        background-color: $blogBackgroundColor;
+
+        &__label {
+            font-size: 1.2rem;
+        }
+
+        &__items {
+            margin-top: 24px;
+        }
+
+        &__item {
+            border-bottom: 1px $gray solid;
+
+            &:first-of-type {
+                border-top: 1px $gray solid;
+            }
         }
     }
 

@@ -4,46 +4,92 @@ import Link from 'next/link';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/androidstudio.css';
+import { useContext, useEffect, useState } from 'react';
 import client from '../../../lib/client';
-import { Tag } from '../../components/index';
+import { RelatedArticle, Tag } from '../../components/index';
 import styles from '../../styles/Article.module.scss';
 import * as Strings from '../../constants/strings';
 import portfolioIcon from '../../../public/images/ic_portfolio.png';
-import { Toc } from '../../models/types';
+import { Blog, Toc } from '../../models/types';
+import { blogContext } from '../../hooks/useBlog';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 function Article({ blog, body, toc }: Props) {
+    const MAX_BLOG_RELATED_COUNT = 5;
     const { id, publishedAt, updatedAt, title, category } = blog;
+    const context = useContext(blogContext);
+    const { allBlogs } = context;
+    const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
+
+    useEffect(() => {
+        const blogs = allBlogs.filter(
+            (item: Blog) => item.category.id === category.id
+        );
+
+        // eslint-disable-next-line no-plusplus
+        for (let i = blogs.length; i > 1; i--) {
+            const k = Math.floor(Math.random() * i);
+            [blogs[k], blogs[i - 1]] = [blogs[i - 1], blogs[k]];
+        }
+        setRelatedBlogs(blogs.slice(0, MAX_BLOG_RELATED_COUNT));
+    }, []);
 
     return (
         <article className={styles.article} key={id}>
-            <main className={styles.article__contents}>
-                <div className={styles.article__header}>
-                    <Image
-                        src={portfolioIcon}
-                        alt='アイコン'
-                        width={32}
-                        height={32}
-                    />
-                    <span className={styles.article__editor}>
-                        {Strings.EDITOR_LABEL}
+            <main className={styles.article__container}>
+                <section className={styles.article__contents}>
+                    <div className={styles.article__header}>
+                        <Image
+                            src={portfolioIcon}
+                            alt='アイコン'
+                            width={32}
+                            height={32}
+                        />
+                        <span className={styles.article__editor}>
+                            {Strings.EDITOR_LABEL}
+                        </span>
+                    </div>
+                    <span className={styles.article__publishedAt}>
+                        {createPublishedAt(publishedAt)}
                     </span>
-                </div>
-                <span className={styles.article__publishedAt}>
-                    {createPublishedAt(publishedAt)}
-                </span>
-                <span className={styles.article__updatedAt}>
-                    {createUpdatedAt(updatedAt)}
-                </span>
-                <p className={styles.article__tag}>
-                    <Tag text={category.name} />
-                </p>
-                <h2 className={styles.article__title}>{title}</h2>
-                <div
-                    className={styles.article__body}
-                    dangerouslySetInnerHTML={{ __html: body }}
-                />
+                    <span className={styles.article__updatedAt}>
+                        {createUpdatedAt(updatedAt)}
+                    </span>
+                    <p className={styles.article__tag}>
+                        <Tag text={category.name} />
+                    </p>
+                    <h2 className={styles.article__title}>{title}</h2>
+                    <div
+                        className={styles.article__body}
+                        dangerouslySetInnerHTML={{ __html: body }}
+                    />
+                </section>
+                <section className={styles['related-article']}>
+                    <h3 className={styles['related-article__label']}>
+                        関連記事
+                    </h3>
+                    <ul className={styles['related-article__items']}>
+                        {relatedBlogs.map((relatedBlog: Blog) => (
+                            <li
+                                key={relatedBlog.id}
+                                className={styles['related-article__item']}
+                            >
+                                <RelatedArticle
+                                    id={relatedBlog.id}
+                                    createdAt={relatedBlog.createdAt}
+                                    updatedAt={relatedBlog.updatedAt}
+                                    publishedAt={relatedBlog.publishedAt}
+                                    revisedAt={relatedBlog.revisedAt}
+                                    title={relatedBlog.title}
+                                    content={relatedBlog.content}
+                                    category={relatedBlog.category}
+                                    eyecatch={relatedBlog.eyecatch}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                </section>
             </main>
             <aside className={styles.article__aside}>
                 <section className={styles.article__toc}>
