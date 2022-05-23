@@ -4,22 +4,20 @@ import Link from 'next/link';
 import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/androidstudio.css';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import client from '../../../lib/client';
 import { RelatedArticle, Tag } from '../../components/index';
 import styles from '../../styles/Article.module.scss';
 import * as Strings from '../../constants/strings';
+import * as Config from '../../constants/config';
 import portfolioIcon from '../../../public/images/ic_portfolio.png';
 import { Blog, Toc } from '../../models/types';
-import { blogContext } from '../../hooks/useBlog';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
-function Article({ blog, body, toc }: Props) {
-    const MAX_BLOG_COUNT = 5;
+function Article(props: Props) {
+    const { allBlogs, blog, body, toc } = props;
     const { id, publishedAt, updatedAt, title, category } = blog;
-    const context = useContext(blogContext);
-    const { allBlogs } = context;
     const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
     const [newBlogs, setNewBlogs] = useState<Blog[]>([]);
 
@@ -27,15 +25,15 @@ function Article({ blog, body, toc }: Props) {
         const blogs = allBlogs.filter(
             (item: Blog) => item.category.id === category.id
         );
-        setNewBlogs(allBlogs.slice(0, MAX_BLOG_COUNT));
+        setNewBlogs(allBlogs.slice(0, Config.MAX_NEW_BLOG_COUNT));
 
         // eslint-disable-next-line no-plusplus
         for (let i = blogs.length; i > 1; i--) {
             const k = Math.floor(Math.random() * i);
             [blogs[k], blogs[i - 1]] = [blogs[i - 1], blogs[k]];
         }
-        setRelatedBlogs(blogs.slice(0, MAX_BLOG_COUNT));
-    }, []);
+        setRelatedBlogs(blogs.slice(0, Config.MAX_RELATED_BLOG_COUNT));
+    }, [props]);
 
     return (
         <article className={styles.article} key={id}>
@@ -154,39 +152,51 @@ export const getStaticPaths = async () => {
 };
 
 /**
- * 指定したブログIdのブログを返す。
+ * 全てのブログと指定したブログIdのブログを返す。
  *
  * @return {Promise<{props: {blogs: any}}>} ブログ
  */
 export const getStaticProps = async (context) => {
     const { id } = context.params;
-    const blog = await client.get({ endpoint: 'blogs', contentId: id });
+    try {
+        // APIでブログの一覧を取得する
+        const allBlogs = await client.get({
+            endpoint: 'blogs',
+            queries: {
+                limit: Config.INITIAL_FETCHING_BLOG_COUNT,
+                orders: '-createdAt',
+            },
+        });
+        const blog = await client.get({ endpoint: 'blogs', contentId: id });
 
-    // リッチテキストを解析する
-    const $ = cheerio.load(blog.content || '');
+        // リッチテキストを解析する
+        const $ = cheerio.load(blog.content || '');
 
-    // iframeタグをラップする
-    $('iframe').wrap('<div class="iframe-wrapper" />');
+        // iframeタグをラップする
+        $('iframe').wrap('<div class="iframe-wrapper" />');
 
-    // コードブロックにハイライトを当てる
-    $('pre code').each((_, element) => {
-        const result = hljs.highlightAuto($(element).text());
-        $(element).html(result.value);
-        $(element).addClass('hljs');
-    });
+        // コードブロックにハイライトを当てる
+        $('pre code').each((_, element) => {
+            const result = hljs.highlightAuto($(element).text());
+            $(element).html(result.value);
+            $(element).addClass('hljs');
+        });
 
-    // 目次に必要なデータ
-    const headers = $('h2, h3').toArray();
-    const toc = headers
-        .map((element) => ({
-            text: 'children' in element ? element.children[0].data : '',
-            id: 'attribs' in element ? element.attribs.id : '',
-            name: 'name' in element ? element.name : '',
-        }))
-        // 不要な見出しの改行を排除する
-        .filter((item: Toc) => item.text !== undefined);
+        // 目次に必要なデータ
+        const headers = $('h2, h3').toArray();
+        const toc = headers
+            .map((element) => ({
+                text: 'children' in element ? element.children[0].data : '',
+                id: 'attribs' in element ? element.attribs.id : '',
+                name: 'name' in element ? element.name : '',
+            }))
+            // 不要な見出しの改行を排除する
+            .filter((item: Toc) => item.text !== undefined);
 
-    return { props: { blog, body: $.html(), toc } };
+        return { props: { allBlogs: allBlogs.contents, blog, body: $.html(), toc } };
+    } catch (error) {
+        return { props: {} };
+    }
 };
 
 /**
