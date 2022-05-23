@@ -18,6 +18,6 @@ body {
 
 .app {
     position: relative;
-    min-height: 100vh;
+    min-height: calc(100vh - 56px);
     box-sizing: border-box;
 }

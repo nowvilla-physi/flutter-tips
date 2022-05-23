@@ -1,11 +1,12 @@
 import { InferGetStaticPropsType } from 'next';
-import { useState } from 'react';
+import { useContext, useEffect } from 'react';
 import client from '../../lib/client';
-import { BlogItem, CategoryButton, Error } from '../components/index';
+import { BlogItem, CategoryButton, Error, NoBlog } from '../components/index';
 import { Blog, Category } from '../models/types';
 import styles from '../styles/Home.module.scss';
 import * as Strings from '../constants/strings';
 import errorImage from '../../public/images/ic_500.png';
+import { blogContext } from '../hooks/useBlog';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
@@ -14,10 +15,16 @@ const INITIAL_LIMIT = 1000;
 
 function Home(props: Props) {
     // getStaticPropsで取得したデータ
-    const { allBlogs, categories } = props;
+    const { fetchedBlogs, categories } = props;
+    const context = useContext(blogContext);
+    const { blogs } = context;
+    const { allBlogs } = context;
 
-    // ブログの一覧
-    const [blogs, setBlogs] = useState<Blog[]>(allBlogs);
+    useEffect(() => {
+        // useContextにステートを保持する
+        context.setAllBlog(fetchedBlogs);
+        context.setBlog(fetchedBlogs);
+    }, []);
 
     /**
      * 指定したカテゴリーでブログをフィルターする。
@@ -26,22 +33,25 @@ function Home(props: Props) {
      */
     const filterBlog = (categoryId: string) => {
         if (categoryId === null) {
-            setBlogs(allBlogs);
+            context.setBlog(allBlogs);
         } else {
             const filteredBlogs = allBlogs.filter(
                 (blog: Blog) => blog.category.id === categoryId
             );
-            setBlogs(filteredBlogs);
+            context.setBlog(filteredBlogs);
         }
     };
 
-    return Object.keys(props).length === 0 ? (
-        <Error
-            errorCode={Strings.INTERNAL_SERVER_ERROR}
-            errorMessage={Strings.INTERNAL_SERVER_ERROR_MESSAGE}
-            errorImage={errorImage}
-        />
-    ) : (
+    if (Object.keys(props).length === 0) {
+        return (
+            <Error
+                errorCode={Strings.INTERNAL_SERVER_ERROR}
+                errorMessage={Strings.INTERNAL_SERVER_ERROR_MESSAGE}
+                errorImage={errorImage}
+            />
+        );
+    }
+    return (
         <main className={styles.home}>
             {/* categories */}
             <section>
@@ -70,24 +80,28 @@ function Home(props: Props) {
             </section>
 
             {/* blogs */}
-            <article className={styles.home__blogs}>
+            {blogs.length === 0 ? (
+                <NoBlog />
+            ) : (
                 <article className={styles.home__blogs}>
-                    {blogs.map((blog: Blog) => (
-                        <BlogItem
-                            key={blog.id}
-                            id={blog.id}
-                            createdAt={blog.createdAt}
-                            updatedAt={blog.updatedAt}
-                            publishedAt={blog.publishedAt}
-                            revisedAt={blog.revisedAt}
-                            title={blog.title}
-                            content={blog.content}
-                            category={blog.category}
-                            eyecatch={blog.eyecatch}
-                        />
-                    ))}
+                    <article className={styles.home__blogs}>
+                        {blogs.map((blog: Blog) => (
+                            <BlogItem
+                                key={blog.id}
+                                id={blog.id}
+                                createdAt={blog.createdAt}
+                                updatedAt={blog.updatedAt}
+                                publishedAt={blog.publishedAt}
+                                revisedAt={blog.revisedAt}
+                                title={blog.title}
+                                content={blog.content}
+                                category={blog.category}
+                                eyecatch={blog.eyecatch}
+                            />
+                        ))}
+                    </article>
                 </article>
-            </article>
+            )}
         </main>
     );
 }
@@ -107,9 +121,10 @@ export const getStaticProps = async () => {
 
         // APIでカテゴリの一覧を取得する
         const categories = await client.get({ endpoint: 'categories' });
+
         return {
             props: {
-                allBlogs: blogs.contents,
+                fetchedBlogs: blogs.contents,
                 categories: categories.contents,
             },
         };

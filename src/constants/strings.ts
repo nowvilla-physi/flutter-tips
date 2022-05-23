@@ -23,6 +23,7 @@ export const HOME_URL = '/';
 // home.
 export const ALL_CATEGORY_BUTTON = 'すべて';
 export const EDITOR_LABEL = 'Posted By Tomoki';
+export const NO_DATA_MESSAGE = '検索結果がありませんでした。';
 
 // footer.
 export const COPYRIGHT = '© 2022 Flutter Tips';

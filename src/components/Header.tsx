@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { useContext } from 'react';
 import styles from '../styles/Header.module.scss';
 import { IconButton, SearchForm } from './index';
 import * as Strings from '../constants/strings';
@@ -8,11 +9,17 @@ import portfolioIcon from '../../public/images/ic_portfolio.png';
 import gitHubIcon from '../../public/images/ic_github.png';
 import twitterIcon from '../../public/images/ic_twitter.png';
 import zennIcon from '../../public/images/ic_zenn.png';
+import { blogContext } from '../hooks/useBlog';
 
 function Header() {
+    const context = useContext(blogContext);
+    const showAllBlogs = () => {
+        context.setBlog(context.allBlogs);
+    };
+
     return (
         <header className={styles.header}>
-            <h1 className={styles.header__logo}>
+            <h1 className={styles.header__logo} onClick={showAllBlogs}>
                 <Link href={Strings.HOME_URL}>
                     <a>
                         <Image src={logoPC} alt='FlutterTips' />

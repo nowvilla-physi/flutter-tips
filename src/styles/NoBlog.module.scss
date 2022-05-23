@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.no-blog {
+    margin-top: 200px;
+    text-align: center;
+
+    &__message {
+        font-size: 1.6rem;
+    }
+
+    &__image {
+        margin-top: 24px;
+    }
+}

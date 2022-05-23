@@ -35,7 +35,6 @@ class Document extends NextDocument {
                         content='/favicons/browserconfig.xml'
                     />
                     <meta name='theme-color' content='#ffffff' />
-                    <title>FlutterTips</title>
                 </Head>
                 <body>
                     <Main />
