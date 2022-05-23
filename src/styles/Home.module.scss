@@ -18,8 +18,7 @@
     &__blogs {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-        row-gap: 32px;
-        column-gap: 16px;
+        gap: 32px;
         padding: 16px 2% 24px;
 
         &-loading {

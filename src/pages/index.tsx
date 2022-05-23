@@ -82,22 +82,20 @@ function Home(props: Props) {
                 <NoBlog />
             ) : (
                 <article className={styles.home__blogs}>
-                    <article className={styles.home__blogs}>
-                        {blogs.map((blog: Blog) => (
-                            <BlogItem
-                                key={blog.id}
-                                id={blog.id}
-                                createdAt={blog.createdAt}
-                                updatedAt={blog.updatedAt}
-                                publishedAt={blog.publishedAt}
-                                revisedAt={blog.revisedAt}
-                                title={blog.title}
-                                content={blog.content}
-                                category={blog.category}
-                                eyecatch={blog.eyecatch}
-                            />
-                        ))}
-                    </article>
+                    {blogs.map((blog: Blog) => (
+                        <BlogItem
+                            key={blog.id}
+                            id={blog.id}
+                            createdAt={blog.createdAt}
+                            updatedAt={blog.updatedAt}
+                            publishedAt={blog.publishedAt}
+                            revisedAt={blog.revisedAt}
+                            title={blog.title}
+                            content={blog.content}
+                            category={blog.category}
+                            eyecatch={blog.eyecatch}
+                        />
+                    ))}
                 </article>
             )}
         </main>
