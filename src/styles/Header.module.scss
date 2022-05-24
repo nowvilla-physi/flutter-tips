@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 @import '_variables.scss';
+@import '_mixin.scss';
 
 .header {
     display: flex;
@@ -15,11 +16,23 @@
     border-bottom: 1px $gray solid;
     background-color: $baseColor;
 
+    @include mq(sm) {
+        padding: 0 2%;
+    }
+
     &__icons {
         display: flex;
 
         &-item {
             padding: 0 8px;
+
+            &:last-of-type {
+                padding-right: 0;
+            }
+
+            @include mq(sm) {
+                padding: 0 4px;
+            }
         }
     }
 }

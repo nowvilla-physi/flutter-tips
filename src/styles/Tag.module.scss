@@ -10,6 +10,10 @@
     color: $white;
     background-color: $accentColor;
     font-size: 0.8rem;
+    max-width: 160px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
 
     &:after {
         position: absolute;
