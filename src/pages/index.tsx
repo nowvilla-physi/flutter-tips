@@ -5,13 +5,11 @@ import { BlogItem, CategoryButton, Error, NoBlog } from '../components/index';
 import { Blog, Category } from '../models/types';
 import styles from '../styles/Home.module.scss';
 import * as Strings from '../constants/strings';
+import * as Config from '../constants/config';
 import errorImage from '../../public/images/ic_500.png';
 import { blogContext } from '../hooks/useBlog';
 
 type Props = InferGetStaticPropsType<typeof getStaticProps>;
-
-// 初期に取得するブログの最大件数
-const INITIAL_LIMIT = 1000;
 
 function Home(props: Props) {
     // getStaticPropsで取得したデータ
@@ -84,22 +82,20 @@ function Home(props: Props) {
                 <NoBlog />
             ) : (
                 <article className={styles.home__blogs}>
-                    <article className={styles.home__blogs}>
-                        {blogs.map((blog: Blog) => (
-                            <BlogItem
-                                key={blog.id}
-                                id={blog.id}
-                                createdAt={blog.createdAt}
-                                updatedAt={blog.updatedAt}
-                                publishedAt={blog.publishedAt}
-                                revisedAt={blog.revisedAt}
-                                title={blog.title}
-                                content={blog.content}
-                                category={blog.category}
-                                eyecatch={blog.eyecatch}
-                            />
-                        ))}
-                    </article>
+                    {blogs.map((blog: Blog) => (
+                        <BlogItem
+                            key={blog.id}
+                            id={blog.id}
+                            createdAt={blog.createdAt}
+                            updatedAt={blog.updatedAt}
+                            publishedAt={blog.publishedAt}
+                            revisedAt={blog.revisedAt}
+                            title={blog.title}
+                            content={blog.content}
+                            category={blog.category}
+                            eyecatch={blog.eyecatch}
+                        />
+                    ))}
                 </article>
             )}
         </main>
@@ -116,7 +112,10 @@ export const getStaticProps = async () => {
         // APIでブログの一覧を取得する
         const blogs = await client.get({
             endpoint: 'blogs',
-            queries: { limit: INITIAL_LIMIT },
+            queries: {
+                limit: Config.INITIAL_FETCHING_BLOG_COUNT,
+                orders: '-createdAt',
+            },
         });
 
         // APIでカテゴリの一覧を取得する
