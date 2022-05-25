@@ -34,3 +34,8 @@ export const UPDATED_AT_LABEL = '更新日：';
 export const TOC_LABEL = '目次';
 export const RELATED_BLOG_LABEL = '関連記事';
 export const NEW_BLOG_LABEL = '新着記事';
+
+// seo
+export const DEFAULT_TITLE = 'FlutterTips';
+export const DEFAULT_DESCRIPTION =
+    'FlutterTipsではFlutterやDartに関するTipsを紹介します。Flutterを開発中の方、入門として勉強したい方にとって役立つサイトになっております。';
