@@ -17,8 +17,8 @@ function MyApp({ Component, pageProps }: AppProps) {
                     canonical='TODO'
                     description={Strings.DEFAULT_DESCRIPTION}
                     twitter={{
-                        handle: 'nowvilla_physi',
-                        site: 'nowvilla_physi',
+                        handle: '@nowvilla_physi',
+                        site: '@nowvilla_physi',
                         cardType: 'summary_large_image',
                     }}
                     openGraph={{
