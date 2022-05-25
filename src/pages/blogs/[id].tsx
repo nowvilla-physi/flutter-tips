@@ -5,6 +5,7 @@ import cheerio from 'cheerio';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/androidstudio.css';
 import { useEffect, useState } from 'react';
+import { NextSeo } from 'next-seo';
 import client from '../../../lib/client';
 import { RelatedArticle, Tag } from '../../components/index';
 import styles from '../../styles/Article.module.scss';
@@ -17,7 +18,7 @@ type Props = InferGetStaticPropsType<typeof getStaticProps>;
 
 function Article(props: Props) {
     const { allBlogs, blog, body, toc } = props;
-    const { id, publishedAt, updatedAt, title, category } = blog;
+    const { id, publishedAt, updatedAt, title, category, eyecatch } = blog;
     const [relatedBlogs, setRelatedBlogs] = useState<Blog[]>([]);
     const [newBlogs, setNewBlogs] = useState<Blog[]>([]);
 
@@ -45,106 +46,129 @@ function Article(props: Props) {
     }, [props]);
 
     return (
-        <article className={styles.article} key={id}>
-            <main className={styles.article__container}>
-                <section className={styles.article__contents}>
-                    <div className={styles.article__header}>
-                        <Image
-                            src={portfolioIcon}
-                            alt='アイコン'
-                            width={32}
-                            height={32}
-                        />
-                        <span className={styles.article__editor}>
-                            {Strings.EDITOR_LABEL}
+        <>
+            <NextSeo
+                title={`${title} | ${Strings.DEFAULT_TITLE}`}
+                description={`${title}について解説いたします。`}
+                twitter={{
+                    handle: '@nowvilla_physi',
+                    site: '@nowvilla_physi',
+                    cardType: 'summary_large_image',
+                }}
+                openGraph={{
+                    type: 'website',
+                    title: `${title} | ${Strings.DEFAULT_TITLE}`,
+                    description: `${title}について解説いたします。`,
+                    images: [
+                        {
+                            url: `${eyecatch.url}`,
+                        },
+                    ],
+                }}
+            />
+            <article className={styles.article} key={id}>
+                <main className={styles.article__container}>
+                    <section className={styles.article__contents}>
+                        <div className={styles.article__header}>
+                            <Image
+                                src={portfolioIcon}
+                                alt='アイコン'
+                                width={32}
+                                height={32}
+                            />
+                            <span className={styles.article__editor}>
+                                {Strings.EDITOR_LABEL}
+                            </span>
+                        </div>
+                        <span className={styles.article__publishedAt}>
+                            {createPublishedAt(publishedAt)}
                         </span>
-                    </div>
-                    <span className={styles.article__publishedAt}>
-                        {createPublishedAt(publishedAt)}
-                    </span>
-                    <span className={styles.article__updatedAt}>
-                        {createUpdatedAt(updatedAt)}
-                    </span>
-                    <p className={styles.article__tag}>
-                        <Tag text={category.name} />
-                    </p>
-                    <h2 className={styles.article__title}>{title}</h2>
-                    <div
-                        className={styles.article__body}
-                        dangerouslySetInnerHTML={{ __html: body }}
-                    />
-                </section>
-                <section className={styles['related-article']}>
-                    <h3 className={styles['related-article__label']}>
-                        {Strings.RELATED_BLOG_LABEL}
-                    </h3>
-                    <ul className={styles['related-article__items']}>
-                        {relatedBlogs.map((relatedBlog: Blog) => (
-                            <li
-                                key={relatedBlog.id}
-                                className={styles['related-article__item']}
-                            >
-                                <RelatedArticle
-                                    id={relatedBlog.id}
-                                    createdAt={relatedBlog.createdAt}
-                                    updatedAt={relatedBlog.updatedAt}
-                                    publishedAt={relatedBlog.publishedAt}
-                                    revisedAt={relatedBlog.revisedAt}
-                                    title={relatedBlog.title}
-                                    content={relatedBlog.content}
-                                    category={relatedBlog.category}
-                                    eyecatch={relatedBlog.eyecatch}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-                <section className={styles['related-article']}>
-                    <h3 className={styles['related-article__label']}>
-                        {Strings.NEW_BLOG_LABEL}
-                    </h3>
-                    <ul className={styles['related-article__items']}>
-                        {newBlogs.map((newBlog: Blog) => (
-                            <li
-                                key={newBlog.id}
-                                className={styles['related-article__item']}
-                            >
-                                <RelatedArticle
-                                    id={newBlog.id}
-                                    createdAt={newBlog.createdAt}
-                                    updatedAt={newBlog.updatedAt}
-                                    publishedAt={newBlog.publishedAt}
-                                    revisedAt={newBlog.revisedAt}
-                                    title={newBlog.title}
-                                    content={newBlog.content}
-                                    category={newBlog.category}
-                                    eyecatch={newBlog.eyecatch}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            </main>
-            <aside className={styles.article__aside}>
-                <section className={styles.article__toc}>
-                    <p className={styles['article__toc-label']}>
-                        {Strings.TOC_LABEL}
-                    </p>
-                    <ul className={styles['article__toc-nav']}>
-                        {toc.map((item: Toc) => (
-                            <li
-                                key={item.id}
-                                className={styles[`article__toc-${item.name}`]}
-                            >
-                                <Link href={`#${item.id}`}>
-                                    <a>{item.text}</a>
-                                </Link>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
-            </aside>
-        </article>
+                        <span className={styles.article__updatedAt}>
+                            {createUpdatedAt(updatedAt)}
+                        </span>
+                        <p className={styles.article__tag}>
+                            <Tag text={category.name} />
+                        </p>
+                        <h2 className={styles.article__title}>{title}</h2>
+                        <div
+                            className={styles.article__body}
+                            dangerouslySetInnerHTML={{ __html: body }}
+                        />
+                    </section>
+                    <section className={styles['related-article']}>
+                        <h3 className={styles['related-article__label']}>
+                            {Strings.RELATED_BLOG_LABEL}
+                        </h3>
+                        <ul className={styles['related-article__items']}>
+                            {relatedBlogs.map((relatedBlog: Blog) => (
+                                <li
+                                    key={relatedBlog.id}
+                                    className={styles['related-article__item']}
+                                >
+                                    <RelatedArticle
+                                        id={relatedBlog.id}
+                                        createdAt={relatedBlog.createdAt}
+                                        updatedAt={relatedBlog.updatedAt}
+                                        publishedAt={relatedBlog.publishedAt}
+                                        revisedAt={relatedBlog.revisedAt}
+                                        title={relatedBlog.title}
+                                        content={relatedBlog.content}
+                                        category={relatedBlog.category}
+                                        eyecatch={relatedBlog.eyecatch}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                    <section className={styles['related-article']}>
+                        <h3 className={styles['related-article__label']}>
+                            {Strings.NEW_BLOG_LABEL}
+                        </h3>
+                        <ul className={styles['related-article__items']}>
+                            {newBlogs.map((newBlog: Blog) => (
+                                <li
+                                    key={newBlog.id}
+                                    className={styles['related-article__item']}
+                                >
+                                    <RelatedArticle
+                                        id={newBlog.id}
+                                        createdAt={newBlog.createdAt}
+                                        updatedAt={newBlog.updatedAt}
+                                        publishedAt={newBlog.publishedAt}
+                                        revisedAt={newBlog.revisedAt}
+                                        title={newBlog.title}
+                                        content={newBlog.content}
+                                        category={newBlog.category}
+                                        eyecatch={newBlog.eyecatch}
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </main>
+                <aside className={styles.article__aside}>
+                    <section className={styles.article__toc}>
+                        <p className={styles['article__toc-label']}>
+                            {Strings.TOC_LABEL}
+                        </p>
+                        <ul className={styles['article__toc-nav']}>
+                            {toc.map((item: Toc) => (
+                                <li
+                                    key={item.id}
+                                    className={
+                                        styles[`article__toc-${item.name}`]
+                                    }
+                                >
+                                    <Link href={`#${item.id}`}>
+                                        <a>{item.text}</a>
+                                    </Link>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </aside>
+            </article>
+        </>
     );
 }
 
