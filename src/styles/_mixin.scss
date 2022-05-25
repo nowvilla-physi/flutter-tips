@@ -1,0 +1,9 @@
+@charset "utf-8";
+
+@import '_breakpoints.scss';
+
+@mixin mq($breakPoint) {
+    @media #{map-get($breakPoints, $breakPoint)} {
+        @content;
+    }
+}

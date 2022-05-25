@@ -1,0 +1,27 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.tag {
+    display: inline-block;
+    position: relative;
+    padding: 4px 8px 4px 24px;
+    border-radius: 4px;
+    color: $white;
+    background-color: $accentColor;
+    font-size: 0.8rem;
+    max-width: 160px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
+    &:after {
+        position: absolute;
+        top: 50%;
+        left: 8px;
+        transform: translateY(-50%);
+        color: $white;
+        font-size: 0.4rem;
+        content: '●';
+    }
+}

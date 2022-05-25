@@ -1,0 +1,3 @@
+export const INITIAL_FETCHING_BLOG_COUNT = 1000;
+export const MAX_RELATED_BLOG_COUNT = 5;
+export const MAX_NEW_BLOG_COUNT = 5;

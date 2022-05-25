@@ -1,2 +1,2 @@
-# flutter-school
-Flutter-School
+# flutter-tips
+FlutterTips

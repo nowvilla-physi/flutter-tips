@@ -1,0 +1,25 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.tooltip {
+    display: inline-block;
+    position: relative;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background-color: $black;
+    color: $white;
+    white-space: nowrap;
+    font-size: 0.6rem;
+    transition: all ease 100ms;
+
+    &:before {
+        position: absolute;
+        top: -14px;
+        left: 50%;
+        margin-left: -8px;
+        border: 8px solid transparent;
+        border-bottom: 8px solid #333;
+        content: '';
+    }
+}

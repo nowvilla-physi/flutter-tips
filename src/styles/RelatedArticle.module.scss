@@ -1,0 +1,37 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+@import '_mixin.scss';
+
+.article {
+    display: flex;
+    padding: 16px 0;
+
+    @include mq(sm) {
+        padding: 8px 0;
+    }
+
+    &__container {
+        width: 100%;
+        margin-left: 16px;
+        padding-top: 8px;
+        font-size: 1.1rem;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+
+        @include mq(sm) {
+            margin-left: 8px;
+            font-size: 0.9rem;
+        }
+    }
+
+    &__editor {
+        margin: 16px 0 0 8px;
+        font-size: 0.9rem;
+
+        @include mq(sm) {
+            font-size: 0.7rem;
+        }
+    }
+}

@@ -1,0 +1,47 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+@import '_mixin.scss';
+
+.search-form {
+    @include mq(sm) {
+        display: none;
+    }
+
+    &__text {
+        padding: 8px 16px;
+        width: 448px;
+        border-radius: 8px;
+        background-color: $lightGray;
+        transition: all ease 100ms;
+
+        &:focus {
+            box-shadow: 0 0 4px $mainColor;
+        }
+
+        @include mq(lg) {
+            width: 332px;
+        }
+
+        @include mq(md) {
+            width: 240px;
+        }
+    }
+
+    &__button {
+        margin-left: 16px;
+        padding: 8px 16px;
+        border-radius: 8px;
+        background-color: $mainColor;
+        color: $white;
+        transition: all ease 400ms;
+
+        @include mq(lg) {
+            margin-left: 8px;
+        }
+
+        &:hover {
+            background-color: $mainColorTransparent;
+        }
+    }
+}

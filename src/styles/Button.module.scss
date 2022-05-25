@@ -1,0 +1,16 @@
+@charset "utf-8";
+
+@import '_variables.scss';
+
+.button {
+    padding: 8px 48px;
+    border-radius: 8px;
+    box-shadow: 4px 4px 8px $gray;
+    background-color: $mainColor;
+    color: $white;
+    transition: all 300ms;
+
+    &:hover {
+        background-color: $accentColor;
+    }
+}
