@@ -25,14 +25,23 @@ function Article(props: Props) {
         const blogs = allBlogs.filter(
             (item: Blog) => item.category.id === category.id
         );
-        setNewBlogs(allBlogs.slice(0, Config.MAX_NEW_BLOG_COUNT));
+        if (blogs.length > Config.MAX_NEW_BLOG_COUNT) {
+            setNewBlogs(allBlogs.slice(0, Config.MAX_NEW_BLOG_COUNT));
+        } else {
+            setNewBlogs(allBlogs.slice(0, blogs.length));
+        }
 
         // eslint-disable-next-line no-plusplus
         for (let i = blogs.length; i > 1; i--) {
             const k = Math.floor(Math.random() * i);
             [blogs[k], blogs[i - 1]] = [blogs[i - 1], blogs[k]];
         }
-        setRelatedBlogs(blogs.slice(0, Config.MAX_RELATED_BLOG_COUNT));
+
+        if (blogs.length > Config.MAX_NEW_BLOG_COUNT) {
+            setRelatedBlogs(blogs.slice(0, Config.MAX_RELATED_BLOG_COUNT));
+        } else {
+            setRelatedBlogs(blogs.slice(0, blogs.length));
+        }
     }, [props]);
 
     return (
@@ -193,7 +202,9 @@ export const getStaticProps = async (context) => {
             // 不要な見出しの改行を排除する
             .filter((item: Toc) => item.text !== undefined);
 
-        return { props: { allBlogs: allBlogs.contents, blog, body: $.html(), toc } };
+        return {
+            props: { allBlogs: allBlogs.contents, blog, body: $.html(), toc },
+        };
     } catch (error) {
         return { props: {} };
     }

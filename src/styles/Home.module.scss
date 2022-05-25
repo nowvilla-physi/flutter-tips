@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 @import '_variables.scss';
+@import '_mixin.scss';
 
 .home {
     margin-top: 56px;
@@ -9,6 +10,8 @@
         display: flex;
         padding: 8px 2%;
         border-bottom: 1px $gray solid;
+        overflow-x: auto;
+        white-space: nowrap;
 
         &-item {
             margin-right: 8px;
@@ -17,9 +20,10 @@
 
     &__blogs {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(298px, 1fr));
+        place-items: center;
         gap: 32px;
-        padding: 16px 2% 24px;
+        padding: 16px 2% 48px;
 
         &-loading {
             padding: 8px 0;

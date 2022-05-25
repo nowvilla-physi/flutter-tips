@@ -1,11 +1,17 @@
 @charset "utf-8";
 
 @import '_variables.scss';
+@import '_mixin.scss';
 
 .icon-button {
     position: relative;
     border-radius: 50%;
     transition: all ease 300ms;
+
+    @include mq(sm) {
+        width: 24px;
+        height: 24px;
+    }
 
     &__image {
         border-radius: 50%;

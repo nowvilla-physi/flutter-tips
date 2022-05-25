@@ -1,6 +1,7 @@
 @charset "utf-8";
 
 @import '_variables.scss';
+@import '_mixin.scss';
 
 .no-blog {
     margin-top: 200px;
@@ -8,6 +9,10 @@
 
     &__message {
         font-size: 1.6rem;
+
+        @include mq(sm) {
+            font-size: 1.2rem;
+        }
     }
 
     &__image {
